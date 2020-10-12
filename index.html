@@ -38,7 +38,7 @@
             let lightness = e.getAttribute("data-l") - 4;
             if (lightness > 0) {  // lower lightness or remove trail when below 0
                 e.setAttribute("data-l", lightness);
-                e.style = "background-color: hsl(" + hue + ",100%," + lightness + "%);";
+                e.style = `background-color: hsl(${hue}, 100%, ${lightness}%);`;
             } else {
                 e.style = "background-color: #000";
                 e.removeAttribute("data-l");
@@ -47,9 +47,9 @@
     }
 
     function colour(e) {
-        h = Math.floor(Math.random() * 255);
-        e.target.style= "background-color: hsl(" + h + ", 100%, 50%);";
-        e.target.setAttribute("data-h", h);
+        hue = Math.floor(Math.random() * 255);
+        e.target.style= `background-color: hsl(${hue}, 100%, 50%);`;
+        e.target.setAttribute("data-h", hue);
         e.target.setAttribute("data-l", 50);
         adaptTrail()
     }
