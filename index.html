@@ -1,0 +1,83 @@
+<html>
+
+<body>
+    <button id="newGrid">New</button>
+    <div id="gridContainer">
+    </div>
+</body>
+
+<script>
+    function makeGrid(size) {
+        if ((isNaN(size)) || (size < 1) || size > 100 ||
+         (size > document.documentElement.clientHeight) || 
+         (size > document.documentElement.clientWidth)) {
+            console.log ('not funny')
+            size = 16;
+        }
+        existingBoxes = document.querySelectorAll(".box");
+        existingBoxes.forEach(element => {
+            element.parentNode.removeChild(element);
+        });
+
+        document.querySelector('#gridContainer').style.gridTemplate = "repeat("+size+", "+90/size+"vmin) / repeat("+size+", "+90/size+"vmin)";
+        gridContainer = document.querySelector("#gridContainer");
+        for (let x=1; x <= size; x++) {
+            for (let y=1; y <= size; y++) {
+                const box = document.createElement("div");
+                box.classList="box";
+                gridContainer.appendChild(box);  
+                box.addEventListener('mouseover', colour);
+            }
+        }
+    }
+
+    function adaptTrail() {
+        trail = document.querySelectorAll("[data-l]");
+        trail.forEach(e => {
+            let hue = e.getAttribute("data-h");
+            let lightness = e.getAttribute("data-l") - 4;
+            if (lightness > 0) {  // lower lightness or remove trail when below 0
+                e.setAttribute("data-l", lightness);
+                e.style = "background-color: hsl(" + hue + ",100%," + lightness + "%);";
+            } else {
+                e.style = "background-color: #000";
+                e.removeAttribute("data-l");
+            }
+        });
+    }
+
+    function colour(e) {
+        h = Math.floor(Math.random() * 255);
+        e.target.style= "background-color: hsl(" + h + ", 100%, 50%);";
+        e.target.setAttribute("data-h", h);
+        e.target.setAttribute("data-l", 50);
+        adaptTrail()
+    }
+
+    const newGridButton = document.querySelector("#newGrid")
+    newGridButton.addEventListener('click', function () { 
+        size = 16;
+        size = window.prompt ("How many squares per side?");
+        makeGrid(size);
+        });
+
+    makeGrid(16);
+
+</script>
+
+<style>
+#gridContainer {
+    display: grid;
+    grid-gap: 0px;     
+}
+.box {
+    box-shadow: 
+    1px 0 0 0 #ccc, 
+    0 1px 0 0 #ccc, 
+    1px 1px 0 0 #ccc,   /* Just to fix the corner */
+    1px 0 0 0 #ccc inset, 
+    0 1px 0 0 #ccc inset;
+}
+
+</style>
+</html>
